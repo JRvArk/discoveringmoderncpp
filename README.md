@@ -1,0 +1,1 @@
+# Solutions to the exercises of the book Discovering Modern C++
