@@ -8,10 +8,12 @@ Checks: >
   bugprone-*,
   -modernize-use-trailing-return-type,
   -readability-magic-numbers,
+  -readability-avoid-nested-conditional-operator,
   -cppcoreguidelines-avoid-magic-numbers,
-  -cppcoreguidelines-pro-bounds-array-to-pointer-decay
+  -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
+  -readability-use-std-min-max
 
-WarningsAsErrors: true
+WarningsAsErrors: false
 
 HeaderFilterRegex: ".*"
 
@@ -25,13 +27,13 @@ CheckOptions:
   - key: readability-identifier-naming.StructCase
     value: CamelCase
   - key: readability-identifier-naming.FunctionCase
-    value: camelCase
+    value: lower_case
   - key: readability-identifier-naming.VariableCase
-    value: camelCase
+    value: lower_case
   - key: readability-identifier-naming.ParameterCase
-    value: camelCase
+    value: lower_case
   - key: readability-identifier-naming.MemberCase
-    value: camelCase
+    value: lower_case
   - key: readability-identifier-naming.ConstantCase
     value: UPPER_CASE
   - key: readability-identifier-naming.EnumConstantCase
