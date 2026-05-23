@@ -67,6 +67,7 @@ jobs:
 
       - name: Run clang-tidy
         run: |
+          echo "-std=c++20" > compile_flags.txt
           find solutions -name '*.cpp' | xargs clang-tidy \
             --quiet \
             --extra-arg-before=-xc++ \
