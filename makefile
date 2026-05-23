@@ -1,6 +1,6 @@
 EXERCISE_DIRS := $(shell find . -mindepth 2 -name 'makefile' -not -path './.git/*' -not -path './.templates/*' | xargs dirname)
 
-.PHONY: all clean fmt $(EXERCISE_DIRS) new-% rm-%
+.PHONY: all clean fmt $(EXERCISE_DIRS) new-% rm-% tidy-%
 
 all: $(EXERCISE_DIRS)
 
@@ -29,6 +29,19 @@ rm-%:
 	@read -p "Delete $(_DIR)? [y/N] " ans && [ "$$ans" = "y" ]
 	rm -rf $(_DIR)
 	@echo "Deleted $(_DIR)"
+
+# make tidy-2.1 → run clang-tidy on exercise ch2 exc1
+tidy-%:
+	$(eval _CH  := $(word 1,$(subst ., ,$*)))
+	$(eval _EXC := $(word 2,$(subst ., ,$*)))
+	$(eval _DIR := $(firstword $(wildcard solutions/ch$(_CH)/exc$(_EXC)*)))
+	@[ -n "$(_DIR)" ] || { echo "Exercise $* not found"; exit 1; }
+	find $(_DIR)/src -name '*.cpp' | xargs clang-tidy \
+		--quiet \
+		--extra-arg-before=-xc++ \
+		--extra-arg=-std=c++20 \
+		--extra-arg=-target --extra-arg=$$(clang++ -dumpmachine) \
+		--extra-arg=-isysroot --extra-arg=$$(xcrun --show-sdk-path)
 
 clean:
 	for dir in $(EXERCISE_DIRS); do \
