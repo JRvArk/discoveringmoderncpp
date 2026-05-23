@@ -7,12 +7,18 @@ on:
     branches: ["**"]
 
 jobs:
-  build-and-lint:
+  build-and-lint-macos:
     runs-on: macos-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Cache LLVM
+        uses: actions/cache@v4
+        with:
+          path: /opt/homebrew/opt/llvm
+          key: llvm-macos-${{ runner.arch }}-${{ hashFiles('.pre-commit-config.yaml') }}
 
       - name: Install LLVM
         run: brew install llvm
@@ -38,3 +44,31 @@ jobs:
             --extra-arg=-std=c++20 \
             --extra-arg=-target --extra-arg=$TARGET \
             --extra-arg=-isysroot --extra-arg=$SDK
+
+  build-and-lint-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install LLVM
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang clang-format clang-tidy
+
+      - name: Build all exercises
+        run: make all
+
+      - name: Check formatting
+        run: |
+          find solutions -name '*.cpp' -o -name '*.h' | \
+          xargs clang-format --dry-run --Werror
+
+      - name: Run clang-tidy
+        run: |
+          echo "-std=c++20" > compile_flags.txt
+          find solutions -name '*.cpp' | xargs clang-tidy \
+            --quiet \
+            --extra-arg-before=-xc++ \
+            --extra-arg=-std=c++20
