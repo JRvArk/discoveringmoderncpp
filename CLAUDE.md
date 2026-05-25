@@ -41,6 +41,13 @@ make clean
   readability, bugprone)
 - **Pre-commit hooks**: clang-format + clang-tidy run automatically on commit
 
+## Reusing Code Between Exercises
+
+When an exercise explicitly extends a previous one, copy the relevant source
+files into the new exercise's `src/` directory rather than recreating the
+class inline. Each exercise stays self-contained; no cross-exercise `#include`
+paths.
+
 ## Code Style
 
 - Use `'\n'` instead of `std::endl`

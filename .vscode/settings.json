@@ -3,6 +3,10 @@
         "editor.inlineSuggestionsInsertMode": "replace"
     },
     "github.copilot.enable": {
-        "cpp": true
+        "*": false,
+        "plaintext": false,
+        "markdown": false,
+        "scminput": false,
+        "cpp": false
     }
 }
